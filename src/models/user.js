@@ -30,6 +30,7 @@ export default sequelize.define('user', {
   },
   password: {
     type: Sequelize.STRING,
+    allowNull: false,
     set(val) {
       this.setDataValue('password', encryptPassword(val));
     },
