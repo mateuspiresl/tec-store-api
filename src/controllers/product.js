@@ -86,8 +86,9 @@ export default Router()
    * @apiVersion 0.0.0
    * @apiDescription Finds all products.
    *
-   * @apiParam {Number} page Page number.
-   * @apiParam {Number} size Number of products per page.
+   * @apiParam {Number} [page] Page number.
+   * @apiParam {Number} [size] Number of products per page.
+   * @apiParam {Number} [categoryId] ID of the categoryto filter by.
    *
    * @apiSuccess (200) {Number} page Page number.
    * @apiSuccess (200) {Number} total Total number of pages.
@@ -102,7 +103,7 @@ export default Router()
    * @apiSuccess (200) {String} product.updatedAt Date of the last update.
    */
   .get('/', async (req, res) => {
-    const { page: pageArg, size: sizeArg } = req.query;
+    const { page: pageArg, size: sizeArg, categoryId } = req.query;
     // Page and size should be greater than 1
     const page = isNaN(pageArg) || pageArg <= 0 ? 1 : parseInt(pageArg, 10);
     const size = isNaN(sizeArg) || sizeArg <= 0 ? PAGE_SIZE : parseInt(sizeArg, 10);
@@ -117,6 +118,7 @@ export default Router()
       )),
       // Fetch tha products considering the pagination
       Product.findAndCountAll({
+        where: categoryId ? { categoryId } : undefined,
         limit: size,
         offset: size * (page - 1),
       }),

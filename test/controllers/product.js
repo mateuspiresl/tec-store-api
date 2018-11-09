@@ -25,12 +25,18 @@ describe('Controllers | Product', () => {
   let cookies = null;
   let categories = null;
 
+  const setCategoryId = categoryId => (categoryId ? `categoryId=${categoryId}&` : '');
   const setPage = page => (page ? `page=${page}&` : '');
   const setSize = size => (size ? `size=${size}` : '');
-  const createFindRoute = (page, size) => (page || size ? `${ROUTE}?${setPage(page)}${setSize(size)}` : ROUTE);
+  const createFindRoute = (category, page, size) => (
+    category || page || size ? `${ROUTE}?${setCategoryId(category)}${setPage(page)}${setSize(size)}` : ROUTE
+  );
 
   const create = data => request(app).post(ROUTE).set('Cookie', cookies).send(data);
-  const find = (page, size) => request(app).get(createFindRoute(page, size)).set('Cookie', cookies).send();
+  const findByCategory = (category, page, size) => (
+    request(app).get(createFindRoute(category, page, size)).set('Cookie', cookies).send()
+  );
+  const find = (page, size) => findByCategory(null, page, size);
   const update = (id, data) => request(app).put(`${ROUTE}/${id}`).set('Cookie', cookies).send(data);
   const remove = id => request(app).delete(`${ROUTE}/${id}`).set('Cookie', cookies).send();
 
@@ -86,10 +92,10 @@ describe('Controllers | Product', () => {
       };
     }
 
-    async function populate() {
+    async function populate(n = 10) {
       const created = [];
 
-      for (let i = 0; i < 10; i += 1) {
+      for (let i = 0; i < n; i += 1) {
         const product = await Product.create(createData(categories[i % 3].id));
         created.push(filter(product.toJSON()));
       }
@@ -139,6 +145,39 @@ describe('Controllers | Product', () => {
       expect(body.page).to.equal(10);
       expect(body.total).to.equal(1);
       expect(body.products).to.be.an('array').of.length(0);
+    });
+
+    it('should filter by category', async () => {
+      const created = await populate(18);
+      const categoryId = categories[0].id;
+      const { body } = await findByCategory(categoryId)
+        .then(expectStatus(codes.successful.OK));
+
+      const products = body.products.map(item => filter({
+        ...item,
+        categoryId: item.category.id,
+      }));
+
+      expect(body.page).to.equal(1);
+      expect(body.total).to.equal(1);
+      expect(products).to.be.an('array').of.length(6);
+      expect(products).to.have.deep.members(created.filter(item => item.categoryId === categoryId));
+    });
+
+    it('should filter by category and paginate across the result', async () => {
+      await populate(18);
+
+      const { body } = await findByCategory(categories[1].id, 2, 3)
+        .then(expectStatus(codes.successful.OK));
+
+      const products = body.products.map(item => filter({
+        ...item,
+        categoryId: item.category.id,
+      }));
+
+      expect(body.page).to.equal(2);
+      expect(body.total).to.equal(2);
+      expect(products).to.be.an('array').of.length(3);
     });
   });
 
