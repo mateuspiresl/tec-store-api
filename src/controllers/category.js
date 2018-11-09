@@ -80,6 +80,7 @@ export default Router()
    * @apiSuccess (200) {String} category.updatedAt Date of the last update.
    *
    * @apiUse CategoryNotFoundError
+   * @apiUse ValidationError
    */
   .put('/:id', async (req, res) => {
     const category = await Category.findOne({ id: req.params.id });
@@ -88,7 +89,8 @@ export default Router()
       throw new ApiError(categoryNotFoundError);
     }
 
-    category.set('name', req.body.name);
+    const { name } = req.body;
+    category.set({ name });
 
     const updated = await category.save()
       .catch(Sequelize.ValidationError, (error) => {

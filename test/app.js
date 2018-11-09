@@ -1,4 +1,4 @@
-/* global describe, it, before, after, afterEach */
+/* global describe, it */
 /* eslint no-unused-expressions: "off" */
 
 import { expect } from 'chai';
