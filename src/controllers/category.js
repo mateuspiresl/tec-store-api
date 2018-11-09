@@ -32,10 +32,10 @@ export default Router()
    * @apiParam {String} name Name.
    *
    * @apiSuccess (200) {Object} category The category.
-   * @apiSuccess (200) {Number} id ID.
-   * @apiSuccess (200) {String} name Name.
-   * @apiSuccess (200) {String} createdAt Date of creation.
-   * @apiSuccess (200) {String} updatedAt Date of the last update.
+   * @apiSuccess (200) {Number} category.id ID.
+   * @apiSuccess (200) {String} category.name Name.
+   * @apiSuccess (200) {String} category.createdAt Date of creation.
+   * @apiSuccess (200) {String} category.updatedAt Date of the last update.
    *
    * @apiUse ValidationError
    */
@@ -55,10 +55,10 @@ export default Router()
    * @apiDescription Finds all categories.
    *
    * @apiSuccess (200) {Object[]} categories The categories.
-   * @apiSuccess (200) {Number} id The id.
-   * @apiSuccess (200) {String} name The name.
-   * @apiSuccess (200) {String} createdAt The date of creation.
-   * @apiSuccess (200) {String} updatedAt The date of the last update.
+   * @apiSuccess (200) {Number} category.id The id.
+   * @apiSuccess (200) {String} category.name The name.
+   * @apiSuccess (200) {String} category.createdAt The date of creation.
+   * @apiSuccess (200) {String} category.updatedAt The date of the last update.
    */
   .get('/', async (req, res) => {
     const categories = await Category.findAll();
@@ -74,10 +74,10 @@ export default Router()
    * @apiParam {String} name Name.
    *
    * @apiSuccess (200) {Object} category The category.
-   * @apiSuccess (200) {Number} id ID.
-   * @apiSuccess (200) {String} name Name.
-   * @apiSuccess (200) {String} createdAt Date of creation.
-   * @apiSuccess (200) {String} updatedAt Date of the last update.
+   * @apiSuccess (200) {Number} category.id ID.
+   * @apiSuccess (200) {String} category.name Name.
+   * @apiSuccess (200) {String} category.createdAt Date of creation.
+   * @apiSuccess (200) {String} category.updatedAt Date of the last update.
    *
    * @apiUse CategoryNotFoundError
    */

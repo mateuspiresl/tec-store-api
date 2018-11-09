@@ -1,7 +1,7 @@
 {
-  "name": "forms-startup",
+  "name": "tec-store-api",
   "version": "0.0.3",
-  "description": "",
+  "description": "TEC Store API",
   "scripts": {
     "start": "node dist/index.js",
     "dev": "NODE_ENV=development nodemon src/index.js --exec babel-node",
@@ -10,12 +10,9 @@
     "test": "NODE_ENV=development mocha --recursive",
     "build": "babel src -d dist",
     "build:doc": "apidoc -i src -o public/doc",
-    "posttest": "grep '\\.only' test/**/*.js || true",
-    "test:users": "NODE_ENV=development babel-node src/test/populate-users.js",
-    "test:surveys": "NODE_ENV=development babel-node src/test/populate-surveys.js",
-    "test:published": "NODE_ENV=development babel-node src/test/create-published.js"
+    "posttest": "grep '\\.only' test/**/*.js || true"
   },
-  "author": "Mateus Pires, Marcello Marques",
+  "author": "Mateus Pires",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.3",
