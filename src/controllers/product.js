@@ -88,7 +88,7 @@ export default Router()
    *
    * @apiParam {Number} [page] Page number.
    * @apiParam {Number} [size] Number of products per page.
-   * @apiParam {Number} [categoryId] ID of the categoryto filter by.
+   * @apiParam {Number} [categoryId] ID of the category to filter by.
    *
    * @apiSuccess (200) {Number} page Page number.
    * @apiSuccess (200) {Number} total Total number of pages.
@@ -118,7 +118,7 @@ export default Router()
       )),
       // Fetch tha products considering the pagination
       Product.findAndCountAll({
-        where: categoryId ? { categoryId } : undefined,
+        where: categoryId && { categoryId },
         limit: size,
         offset: size * (page - 1),
       }),
