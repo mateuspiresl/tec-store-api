@@ -8,15 +8,8 @@ import {
   ModelError,
   codes,
   createError,
+  common,
 } from '../errors';
-
-/**
- * @apiDefine ValidationError
- * @apiVersion 0.0.0
- * @apiError (422) ValidationError Invalid data received.
- */
-const validationError = createError('ValidationError', 'Invalid data received.',
-  codes.client.UNPROCESSABLE_ENTITY);
 
 /**
  * @apiDefine AuthenticationError
@@ -54,20 +47,21 @@ export default Router()
    * @apiParam {String} username Username.
    * @apiParam {String} password Password.
    *
-   * @apiSuccess (200) {String} id ID.
-   * @apiSuccess (200) {String} name Name.
-   * @apiSuccess (200) {String} username Username.
+   * @apiSuccess (200) {Object} user The user.
+   * @apiSuccess (200) {Number} user.id ID.
+   * @apiSuccess (200) {String} user.name Name.
+   * @apiSuccess (200) {String} user.username Username.
    *
    * @apiUse ValidationError
    */
   .post('/register', async (req, res) => {
     const user = await User.create(req.body)
       .catch(Sequelize.ValidationError, () => {
-        throw new ModelError(validationError);
+        throw new ModelError(common.validationError);
       });
 
     req.session.user = createSession(user);
-    res.json(parseUser(user));
+    res.json({ user: parseUser(user) });
   })
 
   /**
@@ -79,9 +73,10 @@ export default Router()
    * @apiParam {String} username Username.
    * @apiParam {String} password Password.
    *
-   * @apiSuccess (200) {String} id ID.
-   * @apiSuccess (200) {String} name Name.
-   * @apiSuccess (200) {String} username Username.
+   * @apiSuccess (200) {Object} user The user.
+   * @apiSuccess (200) {Number} user.id ID.
+   * @apiSuccess (200) {String} user.name Name.
+   * @apiSuccess (200) {String} user.username Username.
    *
    * @apiUse AuthenticationError
    */
@@ -93,7 +88,7 @@ export default Router()
 
     if (user && validatePassword(user, password)) {
       req.session.user = createSession(user);
-      res.json(parseUser(user));
+      res.json({ user: parseUser(user) });
     } else {
       throw new ApiError(authenticationError);
     }

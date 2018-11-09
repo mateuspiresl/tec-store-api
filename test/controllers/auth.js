@@ -22,8 +22,9 @@ describe('Controllers | Auth', () => {
       const data = createData();
       const { body, headers } = await register(data).then(expectStatus(codes.successful.OK));
 
-      expect(body.name).to.equal(data.name);
-      expect(body.username).to.equal(data.username);
+      expect(body.user.id).to.be.a('number');
+      expect(body.user.name).to.equal(data.name);
+      expect(body.user.username).to.equal(data.username);
 
       await check(headers['set-cookie']).then(expectStatus(codes.successful.OK));
     });
@@ -56,8 +57,8 @@ describe('Controllers | Auth', () => {
       await register(data);
 
       const { body, headers } = await login(data).then(expectStatus(codes.successful.OK));
-      expect(body.name).to.equal(data.name);
-      expect(body.username).to.equal(data.username);
+      expect(body.user.name).to.equal(data.name);
+      expect(body.user.username).to.equal(data.username);
 
       await check(headers['set-cookie']).then(expectStatus(codes.successful.OK));
     });

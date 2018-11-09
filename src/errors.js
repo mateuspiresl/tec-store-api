@@ -100,3 +100,13 @@ export const createError = (
 ) => ({
   name, message, status, details,
 });
+
+export const common = {
+  /**
+   * @apiDefine ValidationError
+   * @apiVersion 0.0.0
+   * @apiError (422) ValidationError Invalid data received.
+   */
+  validationError: createError('ValidationError', 'Invalid data received.',
+    codes.client.UNPROCESSABLE_ENTITY),
+}

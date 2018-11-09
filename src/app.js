@@ -11,6 +11,7 @@ import { ApiError, codes } from './errors';
 import sessionMiddleware from './middlewares/session';
 import loggerMiddleware from './middlewares/logger';
 import AuthController from './controllers/auth';
+import CategoryController from './controllers/category';
 
 const app = express()
   .use(bodyParser.json({ limit: '5mb' }))
@@ -24,6 +25,7 @@ const app = express()
 
   // Routes
   .use('/api/auth', AuthController)
+  .use('/api/category', CategoryController)
 
   // Not found
   .use((req, res, next) => {
@@ -32,7 +34,7 @@ const app = express()
 
   // Error handler
   .use((error, req, res, next) => {
-    logger.error('%s', error);
+    logger.error('%s%s', error, error.details ? `\n\t${error.details}` : '');
     res.status(error.status || codes.server.INTERNAL_SERVER_ERROR);
     res.send(`${error.name}: ${error.message}`);
     next();

@@ -8,6 +8,8 @@ before(function beforeAll() {
   return sequelize.sync({ force: true }); // logging: console.log
 });
 
+export const random = () => Math.random().toString();
+
 export function expectStatus(code) {
   return (response) => {
     if (response.statusCode === code) {
